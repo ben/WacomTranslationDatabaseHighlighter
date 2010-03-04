@@ -11,15 +11,17 @@ namespace WacomTranslationDatabaseHighlighter
 {
     internal sealed class Components
     {
+        // Map ".utf8" extension to the content-type
         [Export]
         [FileExtension(".utf8")]
-        [ContentType("Wacom.TranslationDatabase")]
-        internal FileExtensionToContentTypeDefinition utf8FileExtensionDefinition;
+        [ContentType("wacom.tdb")]
+        internal FileExtensionToContentTypeDefinition utf8FileExtensionDefinition = null;
 
+        // Metadata about content type
         [Export]
-        [Name("Wacom.TranslationDatabase")]
+        [Name("wacom.tdb")]
         [BaseDefinition("text")]
-        internal static ContentTypeDefinition utf8ContentTypeDefinition;
+        internal static ContentTypeDefinition utf8ContentTypeDefinition = null;
     }
 
 
@@ -29,7 +31,7 @@ namespace WacomTranslationDatabaseHighlighter
     /// the content type is set to "text", this classifier applies to all text files
     /// </summary>
     [Export(typeof(IClassifierProvider))]
-    [ContentType("Wacom.TranslationDatabase")]
+    [ContentType("wacom.tdb")]
     internal class WacomTranslationDatabaseHighlighterProvider : IClassifierProvider
     {
         /// <summary>
@@ -60,10 +62,10 @@ namespace WacomTranslationDatabaseHighlighter
 
         internal WacomTranslationDatabaseHighlighter(IClassificationTypeRegistryService registry)
         {
-            _keyType = registry.GetClassificationType("WacomTranslationDatabaseHighlighter.Key");
-            _valType = registry.GetClassificationType("WacomTranslationDatabaseHighlighter.Value");
-            _sepType = registry.GetClassificationType("WacomTranslationDatabaseHighlighter.Separator");
-            _errType = registry.GetClassificationType("WacomTranslationDatabaseHighlighter.Error");
+            _keyType = registry.GetClassificationType("wacom.tdb.key");
+            _valType = registry.GetClassificationType("wacom.tdb.value");
+            _sepType = registry.GetClassificationType("wacom.tdb.separator");
+            _errType = registry.GetClassificationType("wacom.tdb.error");
         }
 
         /// <summary>
