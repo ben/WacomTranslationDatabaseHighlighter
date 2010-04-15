@@ -2,6 +2,7 @@
 using System.Windows.Media;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
+using System.Windows;
 
 namespace WacomTranslationDatabaseHighlighter
 {
@@ -23,7 +24,7 @@ namespace WacomTranslationDatabaseHighlighter
 		public WacomTranslationDatabaseHighlighterKeyFormat()
 		{
 			this.DisplayName = "WacomTranslationDatabaseHighlighter"; //human readable version of the name
-			this.BackgroundColor = Colors.LightBlue;
+			this.ForegroundColor = Colors.Blue;
 			this.TextDecorations = System.Windows.TextDecorations.Underline;
 		}
 	}
@@ -47,7 +48,7 @@ namespace WacomTranslationDatabaseHighlighter
 		public WacomTranslationDatabaseHighlighterValueFormat()
 		{
 			this.DisplayName = "WacomTranslationDatabaseHighlighter"; //human readable version of the name
-			this.BackgroundColor = Colors.LightGreen;
+			this.ForegroundColor = Colors.DarkRed;
 		}
 	}
 	#endregion //Format definition
@@ -94,7 +95,14 @@ namespace WacomTranslationDatabaseHighlighter
 		public WacomTranslationDatabaseHighlighterErrorFormat()
 		{
 			this.DisplayName = "WacomTranslationDatabaseHighlighter"; //human readable version of the name
-			this.BackgroundColor = Colors.OrangeRed;
+            this.TextDecorations = new System.Windows.TextDecorationCollection()
+            {
+                new TextDecoration()
+                {
+                    Pen = new Pen(new SolidColorBrush(Colors.Red), 3),
+                    PenThicknessUnit = TextDecorationUnit.FontRecommended,
+                }
+            };
 		}
 	}
 	#endregion //Format definition
