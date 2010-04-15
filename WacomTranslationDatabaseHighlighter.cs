@@ -11,15 +11,17 @@ namespace WacomTranslationDatabaseHighlighter
 {
 	internal sealed class Components
 	{
+		// Map ".utf8" extension to the content-type
 		[Export]
 		[FileExtension(".utf8")]
-		[ContentType("Wacom.TranslationDatabase")]
-		internal FileExtensionToContentTypeDefinition utf8FileExtensionDefinition;
+		[ContentType("wacom.tdb")]
+		internal FileExtensionToContentTypeDefinition utf8FileExtensionDefinition = null;
 
+		// Metadata about content type
 		[Export]
-		[Name("Wacom.TranslationDatabase")]
+		[Name("wacom.tdb")]
 		[BaseDefinition("text")]
-		internal static ContentTypeDefinition utf8ContentTypeDefinition;
+		internal static ContentTypeDefinition utf8ContentTypeDefinition = null;
 	}
 
 
@@ -29,7 +31,7 @@ namespace WacomTranslationDatabaseHighlighter
 	/// the content type is set to "text", this classifier applies to all text files
 	/// </summary>
 	[Export(typeof(IClassifierProvider))]
-	[ContentType("Wacom.TranslationDatabase")]
+	[ContentType("wacom.tdb")]
 	internal class WacomTranslationDatabaseHighlighterProvider : IClassifierProvider
 	{
 		/// <summary>
@@ -60,10 +62,10 @@ namespace WacomTranslationDatabaseHighlighter
 
 		internal WacomTranslationDatabaseHighlighter(IClassificationTypeRegistryService registry)
 		{
-			_keyType = registry.GetClassificationType("WacomTranslationDatabaseHighlighter.Key");
-			_valType = registry.GetClassificationType("WacomTranslationDatabaseHighlighter.Value");
-			_sepType = registry.GetClassificationType("WacomTranslationDatabaseHighlighter.Separator");
-			_errType = registry.GetClassificationType("WacomTranslationDatabaseHighlighter.Error");
+			_keyType = registry.GetClassificationType("wacom.tdb.key");
+			_valType = registry.GetClassificationType("wacom.tdb.value");
+			_sepType = registry.GetClassificationType("wacom.tdb.separator");
+			_errType = registry.GetClassificationType("wacom.tdb.error");
 		}
 
 		/// <summary>
@@ -76,51 +78,56 @@ namespace WacomTranslationDatabaseHighlighter
 		{
 			//create a list to hold the results
 			List<ClassificationSpan> classifications = new List<ClassificationSpan>();
+			if (span.Snapshot.Length == 0)
+				return classifications;
 
-			// Split the line with the first tab character
-			string text = span.GetText();
-			int totalLength = text.Length;
-			int tabPosition = text.IndexOf('\t');
-
-			if (tabPosition < 0)
+			int startline = span.Start.GetContainingLine().LineNumber;
+			int endline = (span.End - 1).GetContainingLine().LineNumber;
+			for (int i = startline; i <= endline; i++)
 			{
-				// No tab, error the entire line
-				return new List<ClassificationSpan>
-                {
-                    new ClassificationSpan(span, _errType)
-                };
-			}
+				ITextSnapshotLine line = span.Snapshot.GetLineFromLineNumber(i);
+				string text = line.GetText();
+				int linelen = text.Length;
+				int tabpos = text.IndexOf('\t');
 
-			if (tabPosition == 0)
-			{
-				// Tab at start of line, error just the tab
-				classifications.Add(new ClassificationSpan(
-					 new SnapshotSpan(span.Snapshot, new Span(span.Start, 1)),
-					 _errType));
-			}
+				if (tabpos < 0)
+				{
+					// No tab, call the entire line an error
+					classifications.Add(new ClassificationSpan(line.Extent, _errType));
+					continue;
+				}
 
-			if (tabPosition > 0)
-			{
-				classifications.Add(new ClassificationSpan(
-					 new SnapshotSpan(span.Snapshot, new Span(span.Start, tabPosition)),
-					 _keyType));
-				classifications.Add(new ClassificationSpan(
-					 new SnapshotSpan(span.Snapshot, new Span(span.Start + tabPosition, 1)),
-					 _sepType));
-				classifications.Add(new ClassificationSpan(
-					 new SnapshotSpan(span.Snapshot,
-						  new Span(span.Start + tabPosition + 1, totalLength - tabPosition - 1)),
-					 _valType));
-			}
+				if (tabpos == 0)
+				{
+					// Tab at start of line means no key.
+					classifications.Add(new ClassificationSpan(
+						new SnapshotSpan(line.Snapshot, new Span(line.Start, 1)),
+						_errType));
+				}
 
-			int secondtabPosition = text.IndexOf('\t', tabPosition + 1);
-			if (secondtabPosition > 0)
-			{
-				// Too many tabs, error starting with the second
-				classifications.Add(new ClassificationSpan(
-					 new SnapshotSpan(span.Snapshot,
-						  new Span(span.Start + secondtabPosition, totalLength - secondtabPosition)),
-					 _errType));
+				if (tabpos > 0)
+				{
+					classifications.Add(new ClassificationSpan(
+						 new SnapshotSpan(line.Snapshot, new Span(line.Start, tabpos)),
+						 _keyType));
+					classifications.Add(new ClassificationSpan(
+						 new SnapshotSpan(line.Snapshot, new Span(line.Start + tabpos, 1)),
+						 _sepType));
+					classifications.Add(new ClassificationSpan(
+						 new SnapshotSpan(line.Snapshot,
+							  new Span(line.Start + tabpos + 1, linelen - tabpos - 1)),
+						 _valType));
+				}
+
+				int secondtabPosition = text.IndexOf('\t', tabpos + 1);
+				if (secondtabPosition > 0)
+				{
+					// Too many tabs, error starting with the second
+					classifications.Add(new ClassificationSpan(
+						 new SnapshotSpan(line.Snapshot,
+							  new Span(line.Start + secondtabPosition, linelen - secondtabPosition)),
+						 _errType));
+				}
 			}
 
 			return classifications;

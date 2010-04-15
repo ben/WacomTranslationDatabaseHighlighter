@@ -6,23 +6,22 @@ namespace WacomTranslationDatabaseHighlighter
 {
 	internal static class WacomTranslationDatabaseHighlighterClassificationKeyDefinition
 	{
-		/// <summary>
-		/// Defines the "WacomTranslationDatabaseHighlighter" classification type.
-		/// </summary>
+		#region Classification types
 		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("WacomTranslationDatabaseHighlighter.Key")]
+		[Name("wacom.tdb.key")]
 		internal static ClassificationTypeDefinition WacomTranslationDatabaseHighlighterKeyType = null;
 
 		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("WacomTranslationDatabaseHighlighter.Value")]
+		[Name("wacom.tdb.value")]
 		internal static ClassificationTypeDefinition WacomTranslationDatabaseHighlighterValueType = null;
 
 		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("WacomTranslationDatabaseHighlighter.Separator")]
+		[Name("wacom.tdb.separator")]
 		internal static ClassificationTypeDefinition WacomTranslationDatabaseHighlighterSeparatorType = null;
 
 		[Export(typeof(ClassificationTypeDefinition))]
-		[Name("WacomTranslationDatabaseHighlighter.Error")]
+		[Name("wacom.tdb.error")]
 		internal static ClassificationTypeDefinition WacomTranslationDatabaseHighlighterErrorType = null;
+		#endregion
 	}
 }

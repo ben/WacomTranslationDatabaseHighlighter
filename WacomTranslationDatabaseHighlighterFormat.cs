@@ -6,24 +6,14 @@ using System.Windows;
 
 namespace WacomTranslationDatabaseHighlighter
 {
-	#region Format definition
-	/// <summary>
-	/// Defines an editor format for the WacomTranslationDatabaseHighlighter type that has a purple background
-	/// and is underlined.
-	/// </summary>
+	#region Key Format definition
 	[Export(typeof(EditorFormatDefinition))]
-	[ClassificationType(ClassificationTypeNames = "WacomTranslationDatabaseHighlighter.Key")]
-	[Name("WacomTranslationDatabaseHighlighter.KeyFormat")]
-	[UserVisible(true)] //this should be visible to the end user
-	[Order(Before = Priority.Default)] //set the priority to be after the default classifiers
+	[ClassificationType(ClassificationTypeNames = "wacom.tdb.key")]
+	[Name("wacom.tdb.key")]
 	internal sealed class WacomTranslationDatabaseHighlighterKeyFormat : ClassificationFormatDefinition
 	{
-		/// <summary>
-		/// Defines the visual format for the "WacomTranslationDatabaseHighlighter" classification type
-		/// </summary>
 		public WacomTranslationDatabaseHighlighterKeyFormat()
 		{
-			this.DisplayName = "WacomTranslationDatabaseHighlighter"; //human readable version of the name
 			this.ForegroundColor = Colors.Blue;
 			this.TextDecorations = System.Windows.TextDecorations.Underline;
 		}
@@ -31,46 +21,26 @@ namespace WacomTranslationDatabaseHighlighter
 	#endregion //Format definition
 
 	#region Value Format definition
-	/// <summary>
-	/// Defines an editor format for the WacomTranslationDatabaseHighlighter type that has a purple background
-	/// and is underlined.
-	/// </summary>
 	[Export(typeof(EditorFormatDefinition))]
-	[ClassificationType(ClassificationTypeNames = "WacomTranslationDatabaseHighlighter.Value")]
-	[Name("WacomTranslationDatabaseHighlighter.ValueFormat")]
-	[UserVisible(true)] //this should be visible to the end user
-	[Order(Before = Priority.Default)] //set the priority to be after the default classifiers
+	[ClassificationType(ClassificationTypeNames = "wacom.tdb.value")]
+	[Name("wacom.tdb.value")]
 	internal sealed class WacomTranslationDatabaseHighlighterValueFormat : ClassificationFormatDefinition
 	{
-		/// <summary>
-		/// Defines the visual format for the "WacomTranslationDatabaseHighlighter" classification type
-		/// </summary>
 		public WacomTranslationDatabaseHighlighterValueFormat()
 		{
-			this.DisplayName = "WacomTranslationDatabaseHighlighter"; //human readable version of the name
 			this.ForegroundColor = Colors.DarkRed;
 		}
 	}
 	#endregion //Format definition
 
 	#region Separator Format definition
-	/// <summary>
-	/// Defines an editor format for the WacomTranslationDatabaseHighlighter type that has a purple background
-	/// and is underlined.
-	/// </summary>
 	[Export(typeof(EditorFormatDefinition))]
-	[ClassificationType(ClassificationTypeNames = "WacomTranslationDatabaseHighlighter.Separator")]
-	[Name("WacomTranslationDatabaseHighlighter.SeparatorFormat")]
-	[UserVisible(true)] //this should be visible to the end user
-	[Order(Before = Priority.Default)] //set the priority to be after the default classifiers
+	[ClassificationType(ClassificationTypeNames = "wacom.tdb.separator")]
+	[Name("wacom.tdb.separator")]
 	internal sealed class WacomTranslationDatabaseHighlighterSeparatorFormat : ClassificationFormatDefinition
 	{
-		/// <summary>
-		/// Defines the visual format for the "WacomTranslationDatabaseHighlighter" classification type
-		/// </summary>
 		public WacomTranslationDatabaseHighlighterSeparatorFormat()
 		{
-			this.DisplayName = "WacomTranslationDatabaseHighlighter"; //human readable version of the name
 			this.BackgroundColor = Colors.Yellow;
 			this.TextDecorations = System.Windows.TextDecorations.Strikethrough;
 		}
@@ -78,23 +48,14 @@ namespace WacomTranslationDatabaseHighlighter
 	#endregion //Format definition
 
 	#region Error Format definition
-	/// <summary>
-	/// Defines an editor format for the WacomTranslationDatabaseHighlighter type that has a purple background
-	/// and is underlined.
-	/// </summary>
 	[Export(typeof(EditorFormatDefinition))]
-	[ClassificationType(ClassificationTypeNames = "WacomTranslationDatabaseHighlighter.Error")]
-	[Name("WacomTranslationDatabaseHighlighter.ErrorFormat")]
-	[UserVisible(true)] //this should be visible to the end user
+	[ClassificationType(ClassificationTypeNames = "wacom.tdb.error")]
+	[Name("wacom.tdb.error")]
 	[Order(After = Priority.Default)] //set the priority to be after the default classifiers
 	internal sealed class WacomTranslationDatabaseHighlighterErrorFormat : ClassificationFormatDefinition
 	{
-		/// <summary>
-		/// Defines the visual format for the "WacomTranslationDatabaseHighlighter" classification type
-		/// </summary>
 		public WacomTranslationDatabaseHighlighterErrorFormat()
 		{
-			this.DisplayName = "WacomTranslationDatabaseHighlighter"; //human readable version of the name
             this.TextDecorations = new System.Windows.TextDecorationCollection()
             {
                 new TextDecoration()
